@@ -1,0 +1,20 @@
+{
+    "projectName": "eventhubnat",
+    "projectPath": "C:\\Users\\Asad-PC\\Documents\\Serverless\\eventhubnat",
+    "defaultEditor": "sublime",
+    "frontendHandler": {
+        "javascript": "C:\\Users\\Asad-PC\\AppData\\Roaming\\npm\\node_modules\\@aws-amplify\\cli\\node_modules\\amplify-frontend-javascript"
+    },
+    "javascript": {
+        "framework": "react-native",
+        "config": {
+            "SourceDir": "/",
+            "DistributionDir": "/",
+            "BuildCommand": "npm.cmd run-script build",
+            "StartCommand": "npm.cmd run-script start"
+        }
+    },
+    "providers": {
+        "awscloudformation": "C:\\Users\\Asad-PC\\AppData\\Roaming\\npm\\node_modules\\@aws-amplify\\cli\\node_modules\\amplify-provider-awscloudformation"
+    }
+}

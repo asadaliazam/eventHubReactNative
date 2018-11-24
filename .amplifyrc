@@ -1,0 +1,14 @@
+{
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "eventhubnat-20181109170608-authRole",
+            "UnauthRoleArn": "arn:aws:iam::309256578756:role/eventhubnat-20181109170608-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::309256578756:role/eventhubnat-20181109170608-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "eventhubnat-20181109170608-deployment",
+            "UnauthRoleName": "eventhubnat-20181109170608-unauthRole",
+            "StackName": "eventhubnat-20181109170608",
+            "StackId": "arn:aws:cloudformation:us-east-1:309256578756:stack/eventhubnat-20181109170608/cf8b0290-e484-11e8-99e8-500c217dbefe"
+        }
+    }
+}

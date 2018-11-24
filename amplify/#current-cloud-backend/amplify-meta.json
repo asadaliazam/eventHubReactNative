@@ -1,0 +1,51 @@
+{
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "eventhubnat-20181109170608-authRole",
+			"UnauthRoleArn": "arn:aws:iam::309256578756:role/eventhubnat-20181109170608-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::309256578756:role/eventhubnat-20181109170608-authRole",
+			"Region": "us-east-1",
+			"DeploymentBucketName": "eventhubnat-20181109170608-deployment",
+			"UnauthRoleName": "eventhubnat-20181109170608-unauthRole",
+			"StackName": "eventhubnat-20181109170608",
+			"StackId": "arn:aws:cloudformation:us-east-1:309256578756:stack/eventhubnat-20181109170608/cf8b0290-e484-11e8-99e8-500c217dbefe"
+		}
+	},
+	"auth": {
+		"cognitoc92536d7": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/eventhubnat-20181109170608-deployment/amplify-cfn-templates/auth/cognitoc92536d7-cloudformation-template.yml",
+				"logicalId": "authcognitoc92536d7"
+			},
+			"lastPushTimeStamp": "2018-11-10T01:18:47.928Z",
+			"output": {
+				"AppClientSecret": "uv70utl2cv1jt5hso9qe5lc9v1caa11jh1rp1rjt5kdln0n6lam",
+				"UserPoolId": "us-east-1_yC5ysX484",
+				"AppClientIDWeb": "okiqfrnna1qj41lvsljteu4td",
+				"AppClientID": "5gru7tsd2efe4f1c33v61f569s",
+				"UserPoolName": "eventhubnatc92536d7_userpool_c92536d7"
+			},
+			"lastPushDirHash": "adg7eqTk5sS/ibPfacKxLUbqNOg="
+		}
+	},
+	"hosting": {
+		"S3AndCloudFront": {
+			"service": "S3AndCloudFront",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/eventhubnat-20181109170608-deployment/amplify-cfn-templates/hosting/template.json",
+				"logicalId": "hostingS3AndCloudFront"
+			},
+			"lastPushTimeStamp": "2018-11-10T01:18:47.932Z",
+			"output": {
+				"S3BucketSecureURL": "https://eventhubnat-20181109171628--hostingbucket.s3.amazonaws.com",
+				"WebsiteURL": "http://eventhubnat-20181109171628--hostingbucket.s3-website-us-east-1.amazonaws.com",
+				"Region": "us-east-1",
+				"HostingBucketName": "eventhubnat-20181109171628--hostingbucket"
+			},
+			"lastPushDirHash": "4z2N0n3AgCeQuWjjwZyrlY3knGo="
+		}
+	}
+}
