@@ -33,6 +33,13 @@ ThirdRoute = () => (
 export default class UserAccount extends React.Component {
   static navigationOptions = {
     title: 'User Account',
+    headerStyle: {
+      backgroundColor: '#02b3e4',
+    },
+    headerTitleStyle: {
+      fontWeight: 'bold',
+      color: 'white',
+    },
   };
 
 
@@ -61,7 +68,10 @@ export default class UserAccount extends React.Component {
   }
 
   _handleIndexChange = index => this.setState({ index });
-  _renderTabBar = props => <TabBar {...props} style={styles.header} />;
+  _renderTabBar = props => <TabBar {...props}        indicatorStyle={styles.indicator}
+  style={styles.tabbar}
+  labelStyle={styles.label}
+/>;
   _renderScene = ({ route }) => {
     switch (route.key) {
       case 'first':
@@ -75,14 +85,6 @@ export default class UserAccount extends React.Component {
         return null;
     }
   };
-
-
-
-
-
-
-
-
 
   componentDidMount() {
   }
@@ -102,6 +104,7 @@ export default class UserAccount extends React.Component {
           height: Dimensions.get('window').height,
 
         }}
+        
       />
 
 
@@ -133,5 +136,16 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: Constants.statusBarHeight,
+  },
+  tabbar: {
+    backgroundColor: '#222',
+  },
+  indicator: {
+    backgroundColor: '#ffeb3b',
+  },
+  label: {
+    color: '#fff',
+    fontWeight: '400',
+    fontSize: 10,
   },
 });

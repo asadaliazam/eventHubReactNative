@@ -1,7 +1,28 @@
 import React from 'react';
-import { AsyncStorage, Picker, TextInput, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { PickerIOS, AsyncStorage, Picker, TextInput, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import axios from 'axios';
+import ModalSelector from 'react-native-modal-selector'
+
+
+let locationIndex = 0;
+const locationData = [
+  { key: locationIndex++, section: true, label: 'Locations' },
+  { key: locationIndex++, label: 'Vancouver, BC, Canada' },
+  { key: locationIndex++, label: 'Surrey, BC, Canada' },
+  { key: locationIndex++, label: 'Richmond, BC, Canada' },
+];
+let timeIndex = 0;
+const timeData = [
+  { key: timeIndex++, section: true, label: 'Time' },
+  { key: timeIndex++, label: 'Today' },
+  { key: timeIndex++, label: 'Tomorrow' },
+  { key: timeIndex++, label: 'This Week' },
+  { key: timeIndex++, label: 'Next Week' },
+  { key: timeIndex++, label: 'Any Time' },
+
+
+];
 
 export default class Search extends React.Component {
   static navigationOptions = {
@@ -23,7 +44,7 @@ export default class Search extends React.Component {
       eventText : '',
       location : 'Vancouver, BC, Canada',
       eventTime : 'Today',
-      event_list : []
+      event_list : [],
 
     };
   }
@@ -93,14 +114,20 @@ export default class Search extends React.Component {
   placeholder='Search for' />
       </View>
       <View>
-      <Picker
+      {/* <PickerIOS
   selectedValue={this.state.location}
   style={{ height: 50, width: '100%' }}
   onValueChange={(itemValue, itemIndex) => this.setState({location: itemValue})}>
   <Picker.Item label="Vancouver, BC, Canada" value="Vancouver, BC, Canada" />
   <Picker.Item label="Surrey, BC, Canada" value="Surrey, BC, Canada" />
-</Picker>
-<Picker
+</PickerIOS> */}
+
+<ModalSelector
+                    data={locationData}
+                    initValue={this.state.location}
+                    onChange={(option)=>{ this.setState({location:option.label})}}>
+                    </ModalSelector>
+{/* <PickerIOS
   selectedValue={this.state.eventTime}
   style={{ height: 50, width: '100%' }}
   onValueChange={(itemValue, itemIndex) => this.setState({eventTime: itemValue})}>
@@ -110,7 +137,13 @@ export default class Search extends React.Component {
   <Picker.Item label="Next Week" value="Next Week" />
   <Picker.Item label="Any Time" value="Any Time" />
 
-</Picker>
+</PickerIOS> */}
+
+<ModalSelector
+                    data={timeData}
+                    initValue={this.state.eventTime}
+                    onChange={(option)=>{ this.setState({eventTime:option.label})}}>
+                    </ModalSelector>
       </View>
       <TouchableOpacity
          style={styles.button}

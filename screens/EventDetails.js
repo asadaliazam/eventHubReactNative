@@ -17,10 +17,18 @@ Geocoder.init('undefined');
 export default class DiscoverNow extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: 'Event Details',
-      headerLeft: (<HeaderBackButton onPress={() => { navigation.navigate('Main') }} />)
+        title: 'Event Details',
+        tintColor: '#ffffff',
+        headerStyle: {
+            backgroundColor: '#02b3e4',
+        },
+        headerLeft: (<HeaderBackButton style={{color: "#ffffff", tintColor: '#ffffff', backgroundColor: '#ffffff'}} onPress={() => { navigation.navigate('Main') }} />),
+        headerTitleStyle: {
+            fontWeight: 'bold',
+            color: 'white',
+        },
     }
-  }
+}
 
   constructor(props) {
     super(props);

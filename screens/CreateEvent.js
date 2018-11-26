@@ -6,6 +6,8 @@ import { ImagePicker } from 'expo';
 import { RNS3 } from 'react-native-aws3';
 import moment from 'moment';
 import axios from 'axios';
+import ModalSelector from 'react-native-modal-selector'
+
 
 
 
@@ -20,6 +22,30 @@ import axios from 'axios';
     successActionStatus: 201
   }
 
+let locationIndex = 0;
+const locationData = [
+    { key: locationIndex++, section: true, label: 'Locations' },
+    { key: locationIndex++, label: 'Vancouver, BC, Canada' },
+    { key: locationIndex++, label: 'Surrey, BC, Canada' },
+    { key: locationIndex++, label: 'Richmond, BC, Canada' },
+];
+
+let eventTypeIndex = 0;
+const eventTypeData = [
+  { key: eventTypeIndex++, section: true, label: 'Event Type' },
+  { key: eventTypeIndex++, label: 'Training or Workshop' },
+  { key: eventTypeIndex++, label: 'Networking Event' },
+  { key: eventTypeIndex++, label: 'Social Gathering' },
+];
+
+let eventTopicIndex = 0;
+const eventTopicData = [
+  { key: eventTopicIndex++, section: true, label: 'Event Topic' },
+  { key: eventTopicIndex++, label: 'Science or Technology' },
+  { key: eventTopicIndex++, label: 'Business or Professional' },
+  { key: eventTopicIndex++, label: 'Film, Media or Entertainment' },
+];
+
   
 
 export default class CreateEvent extends React.Component {
@@ -27,7 +53,14 @@ export default class CreateEvent extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: 'Create Event',
-            headerLeft: (<HeaderBackButton onPress={() => { navigation.navigate('Main') }} />)
+            headerStyle: {
+                backgroundColor: '#02b3e4',
+            },
+            headerLeft: (<HeaderBackButton onPress={() => { navigation.navigate('Main') }} />),
+            headerTitleStyle: {
+                fontWeight: 'bold',
+                color: 'white',
+            },
         }
     }
 
@@ -159,14 +192,19 @@ export default class CreateEvent extends React.Component {
                     value={this.state.eventTitle}
                 />
                 <Text>Event Location:</Text>
-                <Picker
+                {/* <Picker
                     selectedValue={this.state.eventLocation}
                     style={{ margin: 10, height: 50 }}
                     onValueChange={(itemValue, itemIndex) => this.setState({ eventLocation: itemValue })}>
                     <Picker.Item label="Surrey, BC, Canada" value="Surrey, BC, Canada" />
                     <Picker.Item label="Vancouver, BC, Canada" value="Vancouver, BC, Canada" />
                     <Picker.Item label="Richmond, BC, Canada" value="Richmond, BC, Canada" />
-                </Picker>
+                </Picker> */}
+                <ModalSelector
+                    data={locationData}
+                    initValue={this.state.eventLocation}
+                    onChange={(option)=>{ this.setState({eventLocation:option.label})}}>
+                    </ModalSelector>
 
                 <TextInput
                     placeholder={'  Event Address'}
@@ -265,23 +303,34 @@ export default class CreateEvent extends React.Component {
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
 
-                <Picker
+                {/* <Picker
                     selectedValue={this.state.eventType}
                     style={{ margin: 10, height: 50 }}
                     onValueChange={(itemValue, itemIndex) => this.setState({ eventType: itemValue })}>
                     <Picker.Item label="Training or Workshop" value="Training or Workshop, Canada" />
                     <Picker.Item label="Networking Event" value="Networking Event" />
                     <Picker.Item label="Social Gathering" value="Social Gathering" />
-                </Picker>
+                </Picker> */}
+                <ModalSelector
+                    data={eventTypeData}
+                    initValue={this.state.eventType}
+                    onChange={(option)=>{ this.setState({eventType:option.label})}}>
+                    </ModalSelector>
 
-                <Picker
+                {/* <Picker
                     selectedValue={this.state.eventTopic}
                     style={{ margin: 10, height: 50 }}
                     onValueChange={(itemValue, itemIndex) => this.setState({ eventTopic: itemValue })}>
                     <Picker.Item label="Science or Technology" value="Science or Technology" />
                     <Picker.Item label="Business or Professional" value="Business or Professional" />
                     <Picker.Item label="Film, Media or Entertainment" value="Film, Media or Entertainment" />
-                </Picker>
+                </Picker> */}
+
+                <ModalSelector
+                    data={eventTopicData}
+                    initValue={this.state.eventTopic}
+                    onChange={(option)=>{ this.setState({eventTopic:option.label})}}>
+                    </ModalSelector>
 
                 <TouchableOpacity
                     style={styles.button}

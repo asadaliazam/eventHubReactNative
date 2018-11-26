@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, AsyncStorage, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import axios from 'axios';
 import moment from 'moment'
 
@@ -60,7 +60,8 @@ export default class DiscoverNow extends React.Component {
   }
 
   render() {
-    console.log(this.props.navigation);
+    const dimensions = Dimensions.get('window');
+    const imageWidth = 0.95 * dimensions.width;
     return (
       <ScrollView style={styles.container}>
       {this.state.event_list.map(event =>
@@ -70,7 +71,7 @@ export default class DiscoverNow extends React.Component {
               onPress={() => { this.viewDetails(event.eventId) }}
             >
               <Image
-                style={{ resizeMode: 'cover', height: 200, width: 340, alignSelf: 'center' }}
+                style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
                 source={{ uri: event.eventPicture }}
               />
               <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>

@@ -1,21 +1,10 @@
 import React from 'react';
-import { AsyncStorage, Image, ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Dimensions, AsyncStorage, Image, ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { FloatingAction } from 'react-native-floating-action';
 import axios from 'axios';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
-
-
-const actions = [{
-  text: 'Create Event',
-  name: 'Create Event',
-  position: 1,
-  color: '#02b3e4'
-},
-];
-
-
-
+import { Permissions, Notifications } from 'expo';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -34,12 +23,47 @@ class HomeScreen extends React.Component {
     this.state = {
       date: new Date(),
       event_list: [],
-      email: ''
+      email: '',
+      
+
+
     }
 
     this.loadEvents = this.loadEvents.bind(this);
     this.viewDetails = this.viewDetails.bind(this);
+    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
 
+  }
+
+  async registerForPushNotificationsAsync() {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+
+    Permissions.askAsync(Permissions.CAMERA);
+    Permissions.askAsync(Permissions.CAMERA_ROLL);
+    let finalStatus = existingStatus;
+  
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+  
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') {
+      return;
+    }
+  
+    // Get the token that uniquely identifies this device
+    let token = await Notifications.getExpoPushTokenAsync();
+  
+    // POST the token to your backend server from where you can retrieve it to send push notifications.
+
+    console.log("TOKEN = " + token);
   }
 
   loadEvents() {
@@ -115,10 +139,13 @@ class HomeScreen extends React.Component {
   }
   
   componentDidMount() {
+    this.registerForPushNotificationsAsync();
     this._retrieveData();
     
   }
   render() {
+    const dimensions = Dimensions.get('window');
+      const imageWidth = 0.95 * dimensions.width;
     console.log(this.state.event_list);
     return (
       <View style={styles.container}>
@@ -147,7 +174,6 @@ class HomeScreen extends React.Component {
             borderColor: '#ea526f'
 
           }
-          // ... You can check the source to find the other keys.
         }}
         onDateChange={(date) => {this.setState({date: date}, function() {
           this.loadEvents();
@@ -160,12 +186,21 @@ class HomeScreen extends React.Component {
               onPress={() => { this.viewDetails(event.eventId) }}
             >
               <Image
-                style={{ resizeMode: 'cover', height: 200, width: 340, alignSelf: 'center' }}
+                style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
                 source={{ uri: event.eventPicture }}
               />
+              <View style={{flex : 1, flexDirection: "row"}}>
+              <View style= {{flex: 0.7}}>
               <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
               <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
               <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
+              </View>
+
+              <View style={{flex: 0.3, alignItems: "center", borderWidth: 1, borderColor: "red"}}>
+                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 12, marginLeft: 5 }}>Tickets Left:</Text>
+                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.remainingTickets}</Text>
+              </View>
+              </View>
 
 
             </TouchableOpacity>
