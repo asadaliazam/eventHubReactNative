@@ -4,6 +4,8 @@ import moment from 'moment';
 import axios from 'axios';
 import { Constants } from 'expo';
 
+moment.locale('en-ca');
+
 
 
 
@@ -29,7 +31,7 @@ export default class RegisteredEvents extends React.Component {
 
     let data = {      
         email : this.state.email,
-        date : moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
+        date : moment.utc(new Date()).format("YYYY-MM-DD hh:mm:ss")
       }
   axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/getRegisteredEvents`, { data })
         .then(res => {
@@ -68,6 +70,9 @@ export default class RegisteredEvents extends React.Component {
 
     console.log("REGISTERED EVENTS")
     console.log(this.state.registeredEvents);
+
+    const dimensions = Dimensions.get('window');
+    const imageWidth = 0.95 * dimensions.width;
  
    
    
@@ -76,15 +81,27 @@ export default class RegisteredEvents extends React.Component {
       <ScrollView>
         {this.state.registeredEvents.map(event =>
              <TouchableOpacity
-            key={event.eventId}
-            style={styles.button}
-          > 
+             key={event.eventId}
+             style={styles.button}
+           >
              <Image
-           style={{width: 200, height: 200, alignSelf:'center'}}
-           source={{uri: event.eventPicture}}
-         />
-               <Text style={{alignSelf: 'center'}}>{event.eventTitle}</Text>  
-        </TouchableOpacity>
+               style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
+               source={{ uri: event.eventPicture }}
+             />
+             <View style={{flex : 1, flexDirection: "column"}}>
+             
+             <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
+             <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventAddress}</Text>
+             <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
+             <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
+           
+
+      
+      
+             </View>
+
+
+           </TouchableOpacity>
         )}
 
 </ScrollView>
@@ -105,9 +122,12 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: 'center',
-    alignItems: 'center',
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#ea526f',
+    width: '95%',
+    
   },
   scene: {
     flex: 1,

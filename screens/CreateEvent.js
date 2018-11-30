@@ -124,8 +124,8 @@ export default class CreateEvent extends React.Component {
             console.log('VALUE OF EVENTID', value);
             this.setState({email: value}, function() {
                 console.log(this.state);
-          let dateStringStart = moment(this.state.eventStartTime).format("YYYY-MM-DD hh:mm:ss");
-          let dateStringEnd = moment(this.state.eventEndTime).format("YYYY-MM-DD hh:mm:ss");
+          let dateStringStart = moment.utc(this.state.eventStartTime).format("YYYY-MM-DD hh:mm:ss");
+          let dateStringEnd = moment.utc(this.state.eventEndTime).format("YYYY-MM-DD hh:mm:ss");
           let tags = [ 'HTML', 'CSS', 'JavaScript', 'React', 'Vue.js', 'React Native', 'Climate', 'Weather', 'Environment', 'Development', 'Design', 'Graphics', 'Medical', 'Drugs', 'Brain', 'Heart', 'Doctor', 'Nurse', 'Scientist', 'Dentist', 'Physics', 'Quantum', 'Computing', 'Microsoft', 'Amazon', 'Google', 'Surgery', 'Medicine', 'Awareness', 'Veterinarian', 'Space', 'Pregnancy', 'Data', 'Health', 'Diet', 'Finance', 'Accountant', 'Accounting', 'Economist', 'Supply Chain', 'Cryptocurrency', 'Auditor', 'GAAP', 'IAS', 'Business Plan', 'Tax', 'Entrepreneur', 'Investor', 'Budget', 'Shareholder', 'Risk Management', 'Analysis', 'Banking', 'Human Resources', 'Lawyer', 'Amendments', 'PWC', 'BDO', 'Credit', 'Loan', 'CIBC', 'BMO', 'International', 'Local', 'Debts', 'Wall Street', 'Markets', 'Shares', 'Film Making', 'Choreography', 'Music', 'Acting', 'Actor', 'Lyrists', 'Poetry', 'Cinema', 'Movies', 'Classics', 'Disaster', 'Action', 'Comedy', 'Thriller', 'Horror', 'Sports', 'Soccer', 'Football', 'Hockey', 'Baseball', 'Basketball', 'Drama', 'Hollywood', 'Bollywood', 'Hip-Hop', 'Rap', 'RnB', 'Soul', 'Rock', 'Indie', 'Singers', 'Band', 'Athletics', 'News', 'Politics', 'Facebook', 'Twitter', 'Instagram', 'YouTube', 'Romance', 'Myths', 'Concert', 'Stunts' ]
     
           let eventTags = [];

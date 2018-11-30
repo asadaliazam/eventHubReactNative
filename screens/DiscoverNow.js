@@ -66,20 +66,29 @@ export default class DiscoverNow extends React.Component {
       <ScrollView style={styles.container}>
       {this.state.event_list.map(event =>
             <TouchableOpacity
-              key={event.eventId}
-              style={styles.button}
-              onPress={() => { this.viewDetails(event.eventId) }}
-            >
-              <Image
-                style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
-                source={{ uri: event.eventPicture }}
-              />
-              <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
-              <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment(event.eventStartTime).format('hh:mm a')}</Text>
-              <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
+            key={event.eventId}
+            style={styles.button}
+            onPress={() => { this.viewDetails(event.eventId) }}
+          >
+            <Image
+              style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
+              source={{ uri: event.eventPicture }}
+            />
+            <View style={{flex : 1, flexDirection: "row"}}>
+            <View style= {{flex: 0.75}}>
+            <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
+            <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD, hh:mm a')}</Text>
+            <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
+            </View>
+
+            <View style={{flex: 0.25, alignItems: "center", borderWidth: 1, borderColor: "#ea526f", justifyContent:'center'}}>
+              <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 10, marginLeft: 5 }}>Tickets Left:</Text>
+              <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.remainingTickets}</Text>
+            </View>
+            </View>
 
 
-            </TouchableOpacity>
+          </TouchableOpacity>
           )}
       </ScrollView>
     );

@@ -15,6 +15,8 @@ export default class VisitedEvents extends React.Component {
   constructor(props) {
     super(props);
     this.loadEvent = this.loadEvent.bind(this);
+    this.viewDetails = this.viewDetails.bind(this);
+
 
     this.state = {
       email: '',
@@ -29,7 +31,7 @@ export default class VisitedEvents extends React.Component {
 
   let data2 = {      
     email : this.state.email,
-    date : moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
+    date : moment.utc(new Date()).format("YYYY-MM-DD hh:mm:ss")
   }
 axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/getVisitedEvents`, { data2 })
     .then(res => {
@@ -57,6 +59,26 @@ axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/ap
      }
   }
 
+  _storeData = async (eventId) => {
+    console.log(typeof(eventId));
+    try {
+      await AsyncStorage.setItem('eventId', (eventId.toString()));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  viewDetails(eventId) {
+    console.log("THIS IS NAVIGATION", this.props.navigation);
+
+    console.log(eventId);
+    this._storeData(eventId);
+    this.props.navigation.navigate('App3', {
+      eventId: eventId,
+    });
+  }
+
   componentDidMount() {
     this._retrieveData();
   }
@@ -65,6 +87,9 @@ axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/ap
 
 
   render() {
+    const dimensions = Dimensions.get('window');
+    const imageWidth = 0.95 * dimensions.width;
+
  
    
    
@@ -73,15 +98,23 @@ axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/ap
       <ScrollView>
         {this.state.visitedEvents.map(event =>
              <TouchableOpacity
-            key={event.eventId}
-            style={styles.button}
-          > 
+             key={event.eventId}
+             style={styles.button}
+           >
              <Image
-           style={{width: 200, height: 200, alignSelf:'center'}}
-           source={{uri: event.eventPicture}}
-         />
-               <Text style={{alignSelf: 'center'}}>{event.eventTitle}</Text>  
-        </TouchableOpacity>
+               style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
+               source={{ uri: event.eventPicture }}
+             />
+             <View style={{flex : 1, flexDirection: "row"}}>
+             <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
+             <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
+             <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
+             </View>
+
+             
+
+
+           </TouchableOpacity>
         )}
 
 </ScrollView>
@@ -104,7 +137,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#ea526f',
+    width: '95%',
+    
   },
   scene: {
     flex: 1,

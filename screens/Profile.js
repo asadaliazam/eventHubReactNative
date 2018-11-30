@@ -20,6 +20,7 @@ export default class Profile extends React.Component {
   };
 
   render() {
+    console.log("THIS IS SPARTA", this.props.navigation)
     return (
       <ScrollView style={styles.container}>
         <TextInput placeholder={'First Name'} style={styles.input} />

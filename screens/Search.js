@@ -1,8 +1,10 @@
 import React from 'react';
-import { PickerIOS, AsyncStorage, Picker, TextInput, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, PickerIOS, AsyncStorage, Picker, TextInput, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import axios from 'axios';
-import ModalSelector from 'react-native-modal-selector'
+import ModalSelector from 'react-native-modal-selector';
+import moment from 'moment';
+
 
 
 let locationIndex = 0;
@@ -11,6 +13,7 @@ const locationData = [
   { key: locationIndex++, label: 'Vancouver, BC, Canada' },
   { key: locationIndex++, label: 'Surrey, BC, Canada' },
   { key: locationIndex++, label: 'Richmond, BC, Canada' },
+  { key: locationIndex++, label: 'Any Place' },
 ];
 let timeIndex = 0;
 const timeData = [
@@ -42,8 +45,8 @@ export default class Search extends React.Component {
 
     this.state = {
       eventText : '',
-      location : 'Vancouver, BC, Canada',
-      eventTime : 'Today',
+      location : 'Any Place',
+      eventTime : 'Any Time',
       event_list : [],
 
     };
@@ -100,6 +103,8 @@ export default class Search extends React.Component {
   }
 
   render() {
+    const dimensions = Dimensions.get('window');
+      const imageWidth = 0.95 * dimensions.width;
     return (
       <ScrollView style={styles.container}>
       <View style={styles.searchBar}>
@@ -114,30 +119,13 @@ export default class Search extends React.Component {
   placeholder='Search for' />
       </View>
       <View>
-      {/* <PickerIOS
-  selectedValue={this.state.location}
-  style={{ height: 50, width: '100%' }}
-  onValueChange={(itemValue, itemIndex) => this.setState({location: itemValue})}>
-  <Picker.Item label="Vancouver, BC, Canada" value="Vancouver, BC, Canada" />
-  <Picker.Item label="Surrey, BC, Canada" value="Surrey, BC, Canada" />
-</PickerIOS> */}
 
 <ModalSelector
                     data={locationData}
                     initValue={this.state.location}
                     onChange={(option)=>{ this.setState({location:option.label})}}>
                     </ModalSelector>
-{/* <PickerIOS
-  selectedValue={this.state.eventTime}
-  style={{ height: 50, width: '100%' }}
-  onValueChange={(itemValue, itemIndex) => this.setState({eventTime: itemValue})}>
-  <Picker.Item label="Today" value="Today" />
-  <Picker.Item label="Tomorrow" value="Tomorrow" />
-  <Picker.Item label="This Week" value="This Week" />
-  <Picker.Item label="Next Week" value="Next Week" />
-  <Picker.Item label="Any Time" value="Any Time" />
 
-</PickerIOS> */}
 
 <ModalSelector
                     data={timeData}
@@ -154,15 +142,28 @@ export default class Search extends React.Component {
        {this.state.event_list.map(event =>
            <TouchableOpacity
            key={event.eventId}
-           style={styles.searchResults}
+           style={styles.buttonOpaque}
            onPress={() => { this.viewDetails(event.eventId) }}
-         > 
-            <Image
-          style={{width: 200, height: 200, alignSelf:'center'}}
-          source={{uri: event.eventPicture}}
-        />
-              <Text style={{alignSelf: 'center'}}>{event.eventTitle}</Text>  
-       </TouchableOpacity>
+         >
+           <Image
+             style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
+             source={{ uri: event.eventPicture }}
+           />
+           <View style={{flex : 1, flexDirection: "row"}}>
+           <View style= {{flex: 0.75}}>
+           <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
+           <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
+           <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
+           </View>
+
+           <View style={{flex: 0.25, alignItems: "center", borderWidth: 1, borderColor: "#ea526f", justifyContent:'center'}}>
+             <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 10, marginLeft: 5 }}>Tickets Left:</Text>
+             <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.remainingTickets}</Text>
+           </View>
+           </View>
+
+
+         </TouchableOpacity>
         )}
       </ScrollView>
       
@@ -187,6 +188,16 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 10,
     marginRight: 10,
+  },
+  buttonOpaque: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#ea526f',
+    width: '95%',
+    
   },
   searchResults: {
     alignSelf: 'center',

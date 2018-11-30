@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button, LinkingIOS, Linking, AsyncStorage, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Button, LinkingIOS, Linking, AsyncStorage, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { HeaderBackButton } from "react-navigation";
 import axios from 'axios';
 import Geocoder from 'react-native-geocoding';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
+import moment from 'moment';
+moment.locale('en-ca');
 
 
 
@@ -17,18 +19,18 @@ Geocoder.init('undefined');
 export default class DiscoverNow extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-        title: 'Event Details',
-        tintColor: '#ffffff',
-        headerStyle: {
-            backgroundColor: '#02b3e4',
-        },
-        headerLeft: (<HeaderBackButton style={{color: "#ffffff", tintColor: '#ffffff', backgroundColor: '#ffffff'}} onPress={() => { navigation.navigate('Main') }} />),
-        headerTitleStyle: {
-            fontWeight: 'bold',
-            color: 'white',
-        },
+      title: 'Event Details',
+      tintColor: '#ffffff',
+      headerStyle: {
+        backgroundColor: '#02b3e4',
+      },
+      headerLeft: (<HeaderBackButton style={{ color: "#ffffff", tintColor: '#ffffff', backgroundColor: '#ffffff' }} onPress={() => { navigation.navigate('Main') }} />),
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        color: 'white',
+      },
     }
-}
+  }
 
   constructor(props) {
     super(props);
@@ -46,10 +48,11 @@ export default class DiscoverNow extends React.Component {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       },
-     
 
-      alreadyRegistered : 0,
+
+      alreadyRegistered: 0,
       alreadyCheckedIn: 0,
+      isEventTime: 0,
 
 
     }
@@ -58,36 +61,38 @@ export default class DiscoverNow extends React.Component {
 
   checkIn() {
     let data = {
-      eventId : this.state.event_list[0].eventId,
-      email : this.state.email
+      eventId: this.state.event_list[0].eventId,
+      email: this.state.email
     }
-axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/checkInToEvent`, { data })
+    axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/checkInToEvent`, { data })
       .then(res => {
-        this.setState({alreadyCheckedIn: 1});
+        this.setState({ alreadyCheckedIn: 1 });
       })
-    .catch((error) => {
-      console.log(error);
-    });
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   register() {
 
     let data = {
-      eventId : this.state.event_list[0].eventId,
+      eventId: this.state.event_list[0].eventId,
       eventStartTime: this.state.event_list[0].eventStartTime,
       eventEndTime: this.state.event_list[0].eventEndTime,
-      email : this.state.email,
+      email: this.state.email,
       eventPicture: this.state.event_list[0].eventPicture,
       eventTitle: this.state.event_list[0].eventTitle,
+      eventLocation: this.state.event_list[0].eventLocation,
+      eventAddress: this.state.event_list[0].eventAddress,
     }
-axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/registerEvent`, { data })
+    axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/registerEvent`, { data })
       .then(res => {
-        this.setState({alreadyRegistered: 1});
+        this.setState({ alreadyRegistered: 1 });
       })
-    .catch((error) => {
-      console.log(error);
-    });
-  
+      .catch((error) => {
+        console.log(error);
+      });
+
 
   }
   _handleOpenWithLinking1 = () => {
@@ -115,31 +120,49 @@ axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/ap
         this.setState({ email: value }, function () {
           console.log("DATA=" + this.state.email + "EVENTID = " + this.state.eventId);
           let data = {
-            eventId : this.state.eventId,
-            email : this.state.email
+            eventId: this.state.eventId,
+            email: this.state.email
           }
 
           axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/checkRegistration`, { data })
             .then(res => {
-                if (res.data[0].count > 0) {
-                    this.setState({alreadyRegistered: 1});
-                }
+              if (res.data[0].count > 0) {
+                this.setState({ alreadyRegistered: 1 });
+              }
             })
-          .catch((error) => {
-            console.log(error);
-          });
+            .catch((error) => {
+              console.log(error);
+            });
 
           axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/checkCheckIn`, { data })
             .then(res => {
-                if (res.data[0].count > 0) {
-                    this.setState({alreadyCheckedIn: 1});
-                }
+              if (res.data[0].count > 0) {
+                this.setState({ alreadyCheckedIn: 1 });
+              }
             })
-          .catch((error) => {
-            console.log(error);
-          });
+            .catch((error) => {
+              console.log(error);
+            });
 
-          
+            let data2 = {
+              eventId: this.state.eventId,
+              email: this.state.email,
+              date: moment.utc().format('YYYY-MM-DD hh:mm:ss')
+            }
+
+            axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/checkForEventTime`, { data2 })
+            .then(res => {
+              console.log("Is this event time?", res.data[0].count);
+              if (res.data[0].count > 0) {
+                this.setState({ isEventTime: 1 });
+                
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+
         });
       }
     }
@@ -207,80 +230,70 @@ axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/ap
 
   render() {
 
-    if (this.state.alreadyRegistered === 0) {
+    const dimensions = Dimensions.get('window');
+    const imageWidth = 0.95 * dimensions.width;
+
+    if (this.state.alreadyRegistered === 0 && this.state.alreadyCheckedIn === 0) {
       registerButton = <TouchableOpacity
-              disabled={false}
-              style={styles.button}
-              onPress={this.register}
-            >
-              <Icon
-                name='check'
-                type='simple-line-icon'
-                color='green' />
-              <Text>Register</Text>
+        disabled={false}
+        style={styles.button}
+        onPress={this.register}
+      >
+        <Text>Register</Text>
       </TouchableOpacity>
-    }
-    else {
-      registerButton = <TouchableOpacity
-              disabled={true}
-              style={styles.button}
-            >
-              <Icon
-                name='check'
-                type='simple-line-icon'
-                color="red" />
-              <Text>Already Registered</Text>
-      </TouchableOpacity>
+    
     }
 
-    if (this.state.alreadyCheckedIn === 0) {
-      checkInButton = 
-      <TouchableOpacity
+    else if (this.state.alreadyRegistered === 1 && this.state.isEventTime === 1 && this.alreadyCheckedIn === 0) {
+      registerButton = <TouchableOpacity
         disabled={false}
         style={styles.button}
         onPress={this.checkIn}
       >
-        <Icon
-          name='check'
-          type='simple-line-icon'
-          color="green" />
-        <Text>Check-in</Text>
+        <Text>Check In</Text>
       </TouchableOpacity>
     }
-    else {
-      checkInButton = 
-      <TouchableOpacity
-        disabled={true}
-        style={styles.button}
-      >
-        <Icon
-          name='check'
-          type='simple-line-icon'
-          color="red" />
-        <Text>Already Checked-in</Text>
-      </TouchableOpacity>
+
+    else if (this.state.alreadyRegistered === 1 && this.state.isEventTime === 0) {
+      registerButton = <TouchableOpacity
+      disabled={true}
+      style={styles.button}
+    >
+      <Text>You are registered!</Text>
+    </TouchableOpacity>
     }
+
+    else if (this.state.alreadyRegistered === 1 && this.state.alreadyCheckedIn === 1) {
+      registerButton = <TouchableOpacity
+      disabled={true}
+      style={styles.button}
+    >
+      <Text>Thanks for checking in!</Text>
+    </TouchableOpacity>
+    }
+    
+
+    
+    
 
     return (
       <ScrollView style={styles.container}>
         {this.state.event_list.map(event =>
           <View style={styles.viewContainer} key={event.eventId}>
             <Image
-              style={{ width: 200, height: 200, alignSelf: 'center' }}
+              style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
               source={{ uri: event.eventPicture }}
             />
-            <Text style={{ alignSelf: 'center' }} >{event.eventTitle}</Text>
-
+            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventEndTime).format('MMMM DD YYYY, hh:mm a')}</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 15, marginLeft: 5 }}>{event.eventAddress}</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 15, marginLeft: 5 }}>{event.eventLocation}</Text>
             {registerButton}
-            <Text style={{ alignSelf: 'center' }}> Are you at this event? </Text>
-            {checkInButton}
-
-            
-
             <Text style={{ alignSelf: 'center' }} >Tickets Left: {event.remainingTickets}</Text>
-            <Text style={{ alignSelf: 'center' }} >{event.eventStartTime}</Text>
-            <Text style={{ alignSelf: 'center' }}>{event.eventEndTime}</Text>
-            <Text style={{ alignSelf: 'center' }}>{event.eventDescription}</Text>
+            <Text style={{ alignSelf: 'center' }}>Event Summary {event.eventSummary}</Text>
+            <Text style={{ alignSelf: 'center' }}>Event Description {event.eventDescription}</Text>
+
           </View>
 
         )}
