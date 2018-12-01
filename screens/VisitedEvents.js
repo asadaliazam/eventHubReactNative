@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Image, View, Text, AsyncStorage, Platform, ScrollView, StyleSheet, Button, Dimensions  } from 'react-native';
+import { TouchableOpacity, Image, View, Text, AsyncStorage, Platform, ScrollView, StyleSheet, Button, Dimensions } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
 import { Constants } from 'expo';
@@ -10,7 +10,7 @@ import { Constants } from 'expo';
 
 export default class VisitedEvents extends React.Component {
 
-  
+
 
   constructor(props) {
     super(props);
@@ -21,26 +21,26 @@ export default class VisitedEvents extends React.Component {
     this.state = {
       email: '',
       visitedEvents: [],
-  };
-}
+    };
+  }
 
-  
+
 
 
   loadEvent() {
 
-  let data2 = {      
-    email : this.state.email,
-    date : moment.utc(new Date()).format("YYYY-MM-DD hh:mm:ss")
-  }
-axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/getVisitedEvents`, { data2 })
-    .then(res => {
-      console.log(res.data);
-      this.setState({visitedEvents:res.data});
-    })
-  .catch((error) => {
-    console.log(error);
-  });
+    let data2 = {
+      email: this.state.email,
+      date: moment.utc(new Date()).format("YYYY-MM-DD hh:mm:ss")
+    }
+    axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/getVisitedEvents`, { data2 })
+      .then(res => {
+        console.log(res.data);
+        this.setState({ visitedEvents: res.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
   }
 
@@ -50,17 +50,17 @@ axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/ap
       if (value !== null) {
         // We have data!!
         console.log('VALUE OF EVENTID', value);
-        this.setState({email: value}, function() {
-            this.loadEvent();
+        this.setState({ email: value }, function () {
+          this.loadEvent();
         });
       }
-     } catch (error) {
-       console.log(error)
-     }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   _storeData = async (eventId) => {
-    console.log(typeof(eventId));
+    console.log(typeof (eventId));
     try {
       await AsyncStorage.setItem('eventId', (eventId.toString()));
     } catch (error) {
@@ -83,41 +83,41 @@ axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/ap
     this._retrieveData();
   }
 
-  
+
 
 
   render() {
     const dimensions = Dimensions.get('window');
     const imageWidth = 0.95 * dimensions.width;
 
- 
-   
-   
-  
+
+
+
+
     return (
       <ScrollView>
         {this.state.visitedEvents.map(event =>
-             <TouchableOpacity
-             key={event.eventId}
-             style={styles.button}
-           >
-             <Image
-               style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
-               source={{ uri: event.eventPicture }}
-             />
-             <View style={{flex : 1, flexDirection: "row"}}>
-             <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
-             <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
-             <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
-             </View>
-
-             
+          <TouchableOpacity
+            key={event.eventId}
+            style={styles.button}
+          >
+            <Image
+              style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
+              source={{ uri: event.eventPicture }}
+            />
+            <View style={{ flex: 1, flexDirection: "column" }}>
+              <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
+              <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
+              <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
+            </View>
 
 
-           </TouchableOpacity>
+
+
+          </TouchableOpacity>
         )}
 
-</ScrollView>
+      </ScrollView>
     );
   }
 }
@@ -135,13 +135,12 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: 'center',
-    alignItems: 'center',
     marginBottom: 10,
     marginTop: 10,
     borderWidth: 1,
     borderColor: '#ea526f',
     width: '95%',
-    
+
   },
   scene: {
     flex: 1,

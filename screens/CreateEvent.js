@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, Button, Image, Picker, ScrollView, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
+import { AsyncStorage, Button, Image, Picker, ScrollView, StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-native';
 import { HeaderBackButton } from "react-navigation";
 import DatePicker from 'react-native-datepicker'
 import { ImagePicker } from 'expo';
@@ -185,21 +185,15 @@ export default class CreateEvent extends React.Component {
         let { image } = this.state;
         return (
             <ScrollView style={styles.container}>
+            <View style={styles.innerContainer}>
                 <TextInput
-                    placeholder={'  Event Title'}
-                    style={{ margin: 10, height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    placeholder={'Event Title'}
+                    style={styles.input}
                     onChangeText={(eventTitle) => this.setState({ eventTitle })}
                     value={this.state.eventTitle}
                 />
                 <Text>Event Location:</Text>
-                {/* <Picker
-                    selectedValue={this.state.eventLocation}
-                    style={{ margin: 10, height: 50 }}
-                    onValueChange={(itemValue, itemIndex) => this.setState({ eventLocation: itemValue })}>
-                    <Picker.Item label="Surrey, BC, Canada" value="Surrey, BC, Canada" />
-                    <Picker.Item label="Vancouver, BC, Canada" value="Vancouver, BC, Canada" />
-                    <Picker.Item label="Richmond, BC, Canada" value="Richmond, BC, Canada" />
-                </Picker> */}
+              
                 <ModalSelector
                     data={locationData}
                     initValue={this.state.eventLocation}
@@ -207,14 +201,14 @@ export default class CreateEvent extends React.Component {
                     </ModalSelector>
 
                 <TextInput
-                    placeholder={'  Event Address'}
-                    style={{ margin: 10, height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    placeholder={'Event Address'}
+                    style={styles.input}
                     onChangeText={(eventAddress) => this.setState({ eventAddress })}
                     value={this.state.eventAddress}
                 />
-                <Text> Event Start Time:</Text>
+                <Text style = {{alignSelf: 'center', marginTop: 8}}> Event Start Time:</Text>
                 <DatePicker
-                    style={{ width: 200, margin: 10, marginTop: 20 }}
+                    style={{width: 200 ,alignSelf:'center', marginTop: 10,}}
                     date={this.state.eventStartTime}
                     mode="datetime"
                     placeholder="select date"
@@ -225,24 +219,27 @@ export default class CreateEvent extends React.Component {
                     cancelBtnText="Cancel"
                     customStyles={{
                         dateIcon: {
-                            position: 'absolute',
-                            left: 0,
-                            top: 4,
-                            marginLeft: 0
+                          position: 'absolute',
+                          left: 0,
+                          top: 4,
+                          marginLeft: 0
                         },
                         dateInput: {
-                            marginLeft: 36
+                          marginLeft: 36,
+                          borderRadius: 7,
+                          borderColor: '#02b3e4'
+              
                         }
-                    }}
+                      }}
                     onDateChange={(date) => {
                         this.setState({ eventStartTime: date }, function () {
                         })
                     }}
                 />
 
-                <Text> Event End Time:</Text>
+                <Text style = {{alignSelf: 'center', marginTop: 8}}> Event End Time:</Text>
                 <DatePicker
-                    style={{ width: 200, margin: 10, marginTop: 20 }}
+                    style={{width: 200 ,alignSelf:'center', marginTop: 10,}}
                     date={this.state.eventEndTime}
                     mode="datetime"
                     placeholder="select date"
@@ -253,15 +250,18 @@ export default class CreateEvent extends React.Component {
                     cancelBtnText="Cancel"
                     customStyles={{
                         dateIcon: {
-                            position: 'absolute',
-                            left: 0,
-                            top: 4,
-                            marginLeft: 0
+                          position: 'absolute',
+                          left: 0,
+                          top: 4,
+                          marginLeft: 0
                         },
                         dateInput: {
-                            marginLeft: 36
+                          marginLeft: 36,
+                          borderRadius: 7,
+                          borderColor: '#02b3e4'
+              
                         }
-                    }}
+                      }}
                     onDateChange={(date) => {
                         this.setState({ eventEndTime: date }, function () {
                         })
@@ -272,27 +272,27 @@ export default class CreateEvent extends React.Component {
 
 
                 <TextInput
-                    placeholder={'  Event Summary'}
-                    style={{ margin: 10, height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    placeholder={'Event Summary'}
+                    style={styles.input}
                     onChangeText={(eventSummary) => this.setState({ eventSummary })}
                     value={this.state.eventSummary}
                 />
 
                 <TextInput
-                    placeholder={'  Event Description'}
+                    placeholder={'Event Description'}
                     multiline = {true}
                     numberOfLines = {6}
-                    style={{ margin: 10, height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    style={styles.input}
                     onChangeText={(eventDescription) => this.setState({ eventDescription })}
                     value={this.state.eventDescription}
                 />
 
                 <TextInput
-                    placeholder={'  Number of Tickets'}
+                    placeholder={'Number of Tickets'}
                     keyboardType = 'numeric'
-                    style={{ margin: 10, height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    style={styles.input}
                     onChangeText={(numberOfTickets) => this.setState({ numberOfTickets })}
-                    value={this.state.numberOfTickets}
+                    value={this.state.numberOfTickets.toString}
                 />
 
                 <Button
@@ -303,28 +303,13 @@ export default class CreateEvent extends React.Component {
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
 
-                {/* <Picker
-                    selectedValue={this.state.eventType}
-                    style={{ margin: 10, height: 50 }}
-                    onValueChange={(itemValue, itemIndex) => this.setState({ eventType: itemValue })}>
-                    <Picker.Item label="Training or Workshop" value="Training or Workshop, Canada" />
-                    <Picker.Item label="Networking Event" value="Networking Event" />
-                    <Picker.Item label="Social Gathering" value="Social Gathering" />
-                </Picker> */}
+
                 <ModalSelector
                     data={eventTypeData}
                     initValue={this.state.eventType}
                     onChange={(option)=>{ this.setState({eventType:option.label})}}>
                     </ModalSelector>
 
-                {/* <Picker
-                    selectedValue={this.state.eventTopic}
-                    style={{ margin: 10, height: 50 }}
-                    onValueChange={(itemValue, itemIndex) => this.setState({ eventTopic: itemValue })}>
-                    <Picker.Item label="Science or Technology" value="Science or Technology" />
-                    <Picker.Item label="Business or Professional" value="Business or Professional" />
-                    <Picker.Item label="Film, Media or Entertainment" value="Film, Media or Entertainment" />
-                </Picker> */}
 
                 <ModalSelector
                     data={eventTopicData}
@@ -339,7 +324,7 @@ export default class CreateEvent extends React.Component {
                     <Text style={{ alignSelf: 'center' }}>Launch Event</Text>
                 </TouchableOpacity>
 
-
+                </View>
             </ScrollView>
         );
     }
@@ -348,22 +333,27 @@ export default class CreateEvent extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 15,
-        backgroundColor: '#fff',
+        padding: 15,
+        backgroundColor: '#dddddd',
     },
     input: {
-        width: 200,
-        height: 44,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: 'black',
-        marginBottom: 10,
-    },
+        height: 50,
+        borderBottomWidth: 1,
+        borderBottomColor: '#02b3e4',
+        margin: 10,
+        
+
+      },
     button: {
         margin: 5,
         alignItems: 'center',
         backgroundColor: '#DDDDDD',
         padding: 10,
         marginBottom: 20,
+    },
+    innerContainer: {
+        backgroundColor: '#fff',
+        flex: 1,
+        borderRadius: 5,
     }
 });
