@@ -31,7 +31,7 @@ export default class RegisteredEvents extends React.Component {
 
     let data = {
       email: this.state.email,
-      date: moment.utc(new Date()).format("YYYY-MM-DD hh:mm:ss")
+      date: moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
     }
     axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/getRegisteredEvents`, { data })
       .then(res => {

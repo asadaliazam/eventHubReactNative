@@ -31,7 +31,7 @@ export default class VisitedEvents extends React.Component {
 
     let data2 = {
       email: this.state.email,
-      date: moment.utc(new Date()).format("YYYY-MM-DD hh:mm:ss")
+      date: moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
     }
     axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/getVisitedEvents`, { data2 })
       .then(res => {

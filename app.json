@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "eventhubnat",
+    "name": "EventHub",
     "description": "EventHub is an an app that provides event suggestions to the users based on their preferences.",
     "slug": "eventhubnat",
     "privacy": "public",
@@ -11,7 +11,7 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logow1.png",
     "splash": {
       "image": "./assets/artboard.png",
       "resizeMode": "cover",
@@ -24,7 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "life.teamred.eventhub"
+    },
+    "android": {
+      "package": "life.teamred.eventhub"
     }
   }
 }

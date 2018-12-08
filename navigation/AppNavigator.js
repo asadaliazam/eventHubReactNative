@@ -17,6 +17,7 @@ const AppStack3 = createStackNavigator({ EventDetails: EventDetails}, {Main:User
 
 
 
+
 // export default createSwitchNavigator({
 //   Main: MainTabNavigator,
 //   AppStack: AppStack

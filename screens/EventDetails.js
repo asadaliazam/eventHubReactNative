@@ -96,19 +96,19 @@ export default class DiscoverNow extends React.Component {
 
   }
   _handleOpenWithLinking1 = () => {
-    Linking.openURL(`https://maps.google.com/?saddr=Current+Location&daddr=${this.state.region.latitude},${this.state.region.longitude}&driving`);
+    Linking.openURL(`https://maps.google.com/?saddr=Current+Location&daddr=${this.state.region.latitude},${this.state.region.longitude}&driving&dirflg=d`);
   }
 
   _handleOpenWithLinking2 = () => {
-    Linking.openURL(`https://maps.google.com/?saddr=Current+Location&daddr=${this.state.region.latitude},${this.state.region.longitude}`);
+    Linking.openURL(`https://maps.google.com/?saddr=Current+Location&daddr=${this.state.region.latitude},${this.state.region.longitude}&dirflg=b`);
   }
 
   _handleOpenWithLinking3 = () => {
-    Linking.openURL(`https://maps.google.com/?saddr=Current+Location&daddr=${this.state.region.latitude},${this.state.region.longitude}&mode=transit`);
+    Linking.openURL(`https://maps.google.com/?saddr=Current+Location&daddr=${this.state.region.latitude},${this.state.region.longitude}&mode=transit&dirflg=w`);
   }
 
   _handleOpenWithLinking4 = () => {
-    Linking.openURL(`https://maps.google.com/?saddr=Current+Location&daddr=${this.state.region.latitude},${this.state.region.longitude}&mode=bicycling`);
+    Linking.openURL(`https://maps.google.com/?saddr=Current+Location&daddr=${this.state.region.latitude},${this.state.region.longitude}&mode=bicycling&dirflg=r`);
   }
 
   _retrieveDataEmail = async () => {
@@ -147,7 +147,7 @@ export default class DiscoverNow extends React.Component {
             let data2 = {
               eventId: this.state.eventId,
               email: this.state.email,
-              date: moment.utc().format('YYYY-MM-DD hh:mm:ss')
+              date: moment().format('YYYY-MM-DD hh:mm:ss')
             }
 
             axios.post(`https://us-central1-testingexpress-216900.cloudfunctions.net/test/api/checkForEventTime`, { data2 })
@@ -233,24 +233,26 @@ export default class DiscoverNow extends React.Component {
     const dimensions = Dimensions.get('window');
     const imageWidth = 0.95 * dimensions.width;
 
+    
+
     if (this.state.alreadyRegistered === 0 && this.state.alreadyCheckedIn === 0) {
       registerButton = <TouchableOpacity
         disabled={false}
         style={styles.button}
         onPress={this.register}
       >
-        <Text>Register</Text>
+        <Text style={styles.registerText}>Register</Text>
       </TouchableOpacity>
     
     }
 
-    else if (this.state.alreadyRegistered === 1 && this.state.isEventTime === 1 && this.alreadyCheckedIn === 0) {
+    else if (this.state.alreadyRegistered === 1 && this.state.isEventTime === 1 && this.state.alreadyCheckedIn === 0) {
       registerButton = <TouchableOpacity
         disabled={false}
         style={styles.button}
         onPress={this.checkIn}
       >
-        <Text>Check In</Text>
+        <Text style={styles.registerText}>Check In</Text>
       </TouchableOpacity>
     }
 
@@ -259,7 +261,7 @@ export default class DiscoverNow extends React.Component {
       disabled={true}
       style={styles.button}
     >
-      <Text>You are registered!</Text>
+      <Text style={styles.registerText}>You are registered!</Text>
     </TouchableOpacity>
     }
 
@@ -268,7 +270,7 @@ export default class DiscoverNow extends React.Component {
       disabled={true}
       style={styles.button}
     >
-      <Text>Thanks for checking in!</Text>
+      <Text style={styles.registerText}>Thanks for checking in!</Text>
     </TouchableOpacity>
     }
     
@@ -284,15 +286,27 @@ export default class DiscoverNow extends React.Component {
               style={{ resizeMode: 'cover', height: 200, width: imageWidth, alignSelf: 'center' }}
               source={{ uri: event.eventPicture }}
             />
-            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
+            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20,  }}>{event.eventTitle}</Text>
+            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 17,  }}>Event Start Time:</Text>
+
             <Text style={{ alignSelf: 'center', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
+            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 17,  }}>Event End Time:</Text>
+
             <Text style={{ alignSelf: 'center', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventEndTime).format('MMMM DD YYYY, hh:mm a')}</Text>
+            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 17,  }}>Event Location:</Text>
+
             <Text style={{ alignSelf: 'center', fontSize: 15, marginLeft: 5 }}>{event.eventAddress}</Text>
             <Text style={{ alignSelf: 'center', fontSize: 15, marginLeft: 5 }}>{event.eventLocation}</Text>
             {registerButton}
-            <Text style={{ alignSelf: 'center' }} >Tickets Left: {event.remainingTickets}</Text>
-            <Text style={{ alignSelf: 'center' }}>Event Summary {event.eventSummary}</Text>
-            <Text style={{ alignSelf: 'center' }}>Event Description {event.eventDescription}</Text>
+            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 17,  }}>Remaining Tickets:</Text>
+
+            <Text style={{ alignSelf: 'center' }} >{event.remainingTickets}</Text>
+            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 17, }}>Event Summary:</Text>
+
+            <Text style={{ alignSelf: 'center', paddingLeft: 15, paddingRight: 15, textAlign: 'center'}}> {event.eventSummary}</Text>
+            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 17,  }}>Event Description:</Text>
+
+            <Text style={{ alignSelf: 'center', paddingLeft: 15, paddingRight: 15, textAlign: 'center' }}>{event.eventDescription}</Text>
 
           </View>
 
@@ -332,6 +346,13 @@ export default class DiscoverNow extends React.Component {
             color='#f50'
             onPress={this._handleOpenWithLinking4} />
         </View>
+
+        <View
+      
+      flex={1}
+      paddingLeft={20}
+      paddingRight= { 20}
+    >
         <MapView
           style={styles.map}
           region={this.state.region}>
@@ -344,6 +365,7 @@ export default class DiscoverNow extends React.Component {
             description="Location of the event"
           />
         </MapView>
+        </View>
 
 
 
@@ -362,16 +384,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignContent: 'center',
     justifyContent: 'center',
+    padding: 5,
   },
   map: {
-    flex: 1,
-    height: 500
+    height: 500,
+    padding: 10,
   },
   button: {
-    alignSelf: 'center',
+    alignSelf: 'stretch',
     alignItems: 'center',
-    paddingRight: 20,
-    paddingLeft: 20,
-    backgroundColor: '#ddd'
+    padding: 17,
+    borderRadius: 4,
+    backgroundColor: '#02b3e4'
   },
+  registerText : {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 15,
+  }
 });

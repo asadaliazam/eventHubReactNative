@@ -1,8 +1,5 @@
 import React from 'react';
 import { TouchableOpacity, Image, View, Text, AsyncStorage, Platform, ScrollView, StyleSheet, Button, Dimensions } from 'react-native';
-import { ProfileStack } from '../navigation/UserNavigator';
-import moment from 'moment';
-import axios from 'axios';
 import { ButtonGroup } from 'react-native-elements';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import { Constants } from 'expo';

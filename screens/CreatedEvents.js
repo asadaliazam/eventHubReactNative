@@ -84,13 +84,13 @@ export default class CreatedEvents extends React.Component {
             <View style= {{flex: 0.75}}>
             <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
             <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
-            <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventAddress}</Text>
+            <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, }}>{event.eventAddress}</Text>
             <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
             </View>
 
-            <View style={{flex: 0.25, alignItems: "center", borderWidth: 1, borderColor: "#ea526f", justifyContent:'center'}}>
-              <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 10, marginLeft: 5 }}>Tickets Left:</Text>
-              <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.remainingTickets}</Text>
+            <View style={{flex: 0.25, alignItems: "center", borderWidth: 1, borderColor: "#ea526f", justifyContent:'center', margin: 5, padding: 5, borderRadius: 4}}>
+                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 10, marginLeft: 5 }}>Tickets Left:</Text>
+              <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20, marginLeft: 5, color: '#ea526f'}}>{event.remainingTickets}</Text>
             </View>
             </View>
 

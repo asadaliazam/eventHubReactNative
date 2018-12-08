@@ -123,21 +123,24 @@ export default class Search extends React.Component {
 <ModalSelector
                     data={locationData}
                     initValue={this.state.location}
-                    onChange={(option)=>{ this.setState({location:option.label})}}>
+                    onChange={(option)=>{ this.setState({location:option.label})}}
+                    style = {{marginLeft: 10, marginRight: 10, }}>
                     </ModalSelector>
 
 
 <ModalSelector
                     data={timeData}
                     initValue={this.state.eventTime}
-                    onChange={(option)=>{ this.setState({eventTime:option.label})}}>
+                    onChange={(option)=>{ this.setState({eventTime:option.label})}}
+                    style = {{marginLeft: 10, marginRight: 10, }}>
+                    
                     </ModalSelector>
       </View>
       <TouchableOpacity
          style={styles.button}
          onPress={this.searchEvents.bind(this)}
        >
-         <Text> Search </Text>
+         <Text style={{color: 'white'}}> Search </Text>
        </TouchableOpacity>
        {this.state.event_list.map(event =>
            <TouchableOpacity
@@ -152,13 +155,13 @@ export default class Search extends React.Component {
            <View style={{flex : 1, flexDirection: "row"}}>
            <View style= {{flex: 0.75}}>
            <Text style={{ alignSelf: 'flex-start', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.eventTitle}</Text>
-           <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment.utc(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
+           <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5 }}>{moment(event.eventStartTime).format('MMMM DD YYYY, hh:mm a')}</Text>
            <Text style={{ alignSelf: 'flex-start', fontSize: 15, marginLeft: 5, marginBottom: 5 }}>{event.eventLocation}</Text>
            </View>
 
-           <View style={{flex: 0.25, alignItems: "center", borderWidth: 1, borderColor: "#ea526f", justifyContent:'center'}}>
-             <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 10, marginLeft: 5 }}>Tickets Left:</Text>
-             <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20, marginLeft: 5 }}>{event.remainingTickets}</Text>
+          <View style={{flex: 0.25, alignItems: "center", borderWidth: 1, borderColor: "#ea526f", justifyContent:'center', margin: 5, padding: 5, borderRadius: 4}}>
+               <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 10, marginLeft: 5 }}>Tickets Left:</Text>
+             <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20, marginLeft: 5, color: '#ea526f' }}>{event.remainingTickets}</Text>
            </View>
            </View>
 
@@ -174,20 +177,23 @@ export default class Search extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
+    paddingTop: 1,
     backgroundColor: '#fff',
   },
   searchBar: {
     flex: 1,
-    margin: 0,
+    marginLeft: 0,
+    marginRight: 0,
     padding: 0
   },
   button: {
     alignItems: 'center',
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#02b3e4',
     padding: 10,
     marginLeft: 10,
     marginRight: 10,
+    marginTop: 10,
+    borderRadius: 4,
   },
   buttonOpaque: {
     alignSelf: 'center',
